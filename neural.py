@@ -6,6 +6,7 @@ from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.datasets import SupervisedDataSet
 from pybrain.structure import FeedForwardNetwork, LinearLayer, SigmoidLayer, GaussianLayer, FullConnection
 import shelve
+import json
 
 brain_shelf = shelve.open("brain.shelf")
 
@@ -59,8 +60,6 @@ def room_to_feature_vector(room, preprocessed, use_grt=True, use_size=True, use_
     if use_bathroom > 0:
         feature.append(room.get_bathroom() / 2.)
     return feature
-
-labeled_rooms = {"224B": 1, "322D": 1, "421B": 7, "244C": 7, "522C": 1, '740': 1, '631C': 1, '839': 4, '744': 3, '631D': 3, '450': 10, '571': 6, '628': 3, '550': 3, '522C': 1, '977': 2, '976': 6, '975': 8, '636': 1, '1077': 3, '874': 1, '875': 8, '872': 6, '1073': 1, '479B': 2, '731': 2, '540': 0, '1034': 1, '653': 1, '544': 5, '545': 8, '739': 1, '1031B': 5, '1031C': 1, '629': 1, '427': 3, '644': 1, '578A': 8, '578B': 2, '637': 1, '624B': 1, '447': 1, '672': 1, '665': 0, '1025': 2, '372': 0, '1044': 2, '738C': 7, '865': 5, '549A': 2, '374': 2, '378': 1, '643': 3, '477': 1, '474': 2, '649': 0, '373': 1, '376': 4, '925': 3, '538': 5, "972": 9, "936": 8, "865": 4, "1052B": 7, "1065": 4, "448": 10, "421B": 7, "429": 10, "426": 9, "1038": 2}
 
 def getRoomsMap(singles, vectors):
     roomsMap = {}
@@ -127,6 +126,9 @@ def main(T=10, load_brain=False, save_brain=False):
     for room, label in labeled_rooms:
         if room.num in available_rooms:
             print "%16.12f: %s" % (label, room)
+
+with open('preferences.json', 'r') as f:
+    labeled_rooms = json.load(f)
 
 main(T=175, load_brain=True, save_brain=False)
 brain_shelf.close()

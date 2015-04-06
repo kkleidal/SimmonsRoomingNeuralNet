@@ -4,3 +4,4 @@ text_files
 *.shelf
 old
 .*.swp
+preferences.json
