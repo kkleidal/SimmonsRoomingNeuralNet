@@ -14,14 +14,14 @@ grts = []
 grt_map = {}
 curvy_map = {"None": 0, "Minor": 1, "Major": 2, "Awful": 3}
 
-use_grt = 1
-use_size = 1
-use_view = 1
-use_position_x = 1
-use_position_y = 1
-use_curvy_wall = 1
-use_floor = 1
-use_bathroom = 1
+use_grt = True
+use_size = True
+use_view = True
+use_position_x = True
+use_position_y = True
+use_curvy_wall = True
+use_floor = True
+use_bathroom = True
 
 def preprocess_rooms(rooms):
     max_size = None
@@ -41,23 +41,24 @@ def preprocess_rooms(rooms):
 
 def room_to_feature_vector(room, preprocessed, use_grt=True, use_size=True, use_view=True, use_position=True, use_curvy_wall=True, use_floor=True):
     feature = []
-    if use_grt > 0:
+    if use_grt:
         if room.grt not in grt_map:
             grts.append(room.grt)
             grt_map[room.grt] = len(grts) - 1
         feature.append(grt_map[room.grt] / float(preprocessed[0]))
-    if use_size > 0:
+    if use_size:
         feature.append(int(room.size) / float(preprocessed[1]))
     if use_view > 0:
         feature.append((1 if room.view == "Boston" else 0))
-    if use_position_x > 0 or use_position_y > 0:
+    if use_position_x:
         feature.append(room.X / float(preprocessed[3][0]))
+    if use_position_y:
         feature.append(room.Y / float(preprocessed[3][1]))
-    if use_curvy_wall > 0:
+    if use_curvy_wall:
         feature.append(curvy_map[room.hasCurvyWall] / float(preprocessed[4]))
-    if use_floor > 0:
+    if use_floor:
         feature.append(int(room.num[0]) / float(preprocessed[5]))
-    if use_bathroom > 0:
+    if use_bathroom:
         feature.append(room.get_bathroom() / 2.)
     return feature
 

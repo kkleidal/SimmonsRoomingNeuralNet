@@ -1,5 +1,5 @@
 text_files
-*.html
+text.html
 *.pyc
 *.shelf
 old
