@@ -85,24 +85,18 @@ def main(T=10, load_brain=False, save_brain=False):
         net.sorted = False
         net.sortModules()
     else:
-        net = FeedForwardNetwork() # buildNetwork(len(all_vectors[0]), 10000, 1)
+        net = FeedForwardNetwork()
         layer_in = LinearLayer(input_units)
-        layer_hidden1 = SigmoidLayer(1000)
-        layer_hidden2 = LinearLayer(100)
+        layer_hidden = SigmoidLayer(1000)
         layer_out = LinearLayer(1)
         net.addInputModule(layer_in)
-        net.addModule(layer_hidden1)
-        net.addModule(layer_hidden2)
+        net.addModule(layer_hidden)
         net.addOutputModule(layer_out)
 
-        in_to_hidden1 = FullConnection(layer_in, layer_hidden1)
-        hidden1_to_hidden2 = FullConnection(layer_hidden2, layer_hidden1)
-        hidden1_to_out = FullConnection(layer_hidden1, layer_out)
-        hidden2_to_out = FullConnection(layer_hidden1, layer_out)
-        net.addConnection(in_to_hidden1)
-        net.addConnection(hidden1_to_hidden2)
-        net.addConnection(hidden2_to_out)
-        # net.addConnection(hidden1_to_out)
+        in_to_hidden = FullConnection(layer_in, layer_hidden)
+        hidden_to_out = FullConnection(layer_hidden, layer_out)
+        net.addConnection(in_to_hidden)
+        net.addConnection(hidden_to_out)
 
         net.sortModules()
 
@@ -131,5 +125,5 @@ def main(T=10, load_brain=False, save_brain=False):
 with open('preferences.json', 'r') as f:
     labeled_rooms = json.load(f)
 
-main(T=175, load_brain=True, save_brain=False)
+main(T=175, load_brain=False, save_brain=True)
 brain_shelf.close()
