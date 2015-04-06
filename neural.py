@@ -88,14 +88,18 @@ def main(T=10, load_brain=False, save_brain=False):
         net = FeedForwardNetwork()
         layer_in = LinearLayer(input_units)
         layer_hidden = SigmoidLayer(1000)
+        layer_hidden2 = SigmoidLayer(100)
         layer_out = LinearLayer(1)
         net.addInputModule(layer_in)
         net.addModule(layer_hidden)
+        net.addModule(layer_hidden2)
         net.addOutputModule(layer_out)
 
         in_to_hidden = FullConnection(layer_in, layer_hidden)
-        hidden_to_out = FullConnection(layer_hidden, layer_out)
+        hidden_to_hidden = FullConnection(layer_hidden, layer_hidden2)
+        hidden_to_out = FullConnection(layer_hidden2, layer_out)
         net.addConnection(in_to_hidden)
+        net.addConnection(hidden_to_hidden)
         net.addConnection(hidden_to_out)
 
         net.sortModules()
@@ -125,5 +129,5 @@ def main(T=10, load_brain=False, save_brain=False):
 with open('preferences.json', 'r') as f:
     labeled_rooms = json.load(f)
 
-main(T=175, load_brain=False, save_brain=True)
+main(T=175, load_brain=True, save_brain=True)
 brain_shelf.close()
