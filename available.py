@@ -1,14 +1,13 @@
 import re
+import requests
 
 start = re.compile('(<h2>Available Rooms</h2>)');
 pattern = re.compile('(<b>([^< ]*)[^<]*</b>)')
 end = re.compile('(</div>)');
 
 def get_available_rooms():
-    content = ""
-    with open('text.html', 'r') as f:
-        for line in f:
-            content += line
+    r = requests.get('https://simmons-hall.scripts.mit.edu:444/rooming/text', cert='keystore.pem')
+    content = r.text
     content = content[start.search(content).end(1):]
     content = content[:end.search(content).start(1)]
     available = set()
